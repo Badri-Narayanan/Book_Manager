@@ -1,0 +1,17 @@
+{
+    "name": {
+        "display_text": "Book Name",
+        "Description": "This field represents the book name to identify a book in the collection.",
+        "value": "input('Enter the Book name : ')"
+    },
+    "author": {
+        "display_text": "Author of the Book",
+        "Description": "This field represents the author name of the book.",
+        "value": "input('Enter the Author name of the book : ')"
+    },
+    "is_read": {
+        "display_text": "Is Book Read",
+        "Description": "This field tells us whether a book is read or not.",
+        "value": "False"
+    }
+}
