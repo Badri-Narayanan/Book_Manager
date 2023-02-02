@@ -1,17 +1,23 @@
 {
     "name": {
+        "type": "TEXT",
         "display_text": "Book Name",
         "Description": "This field represents the book name to identify a book in the collection.",
-        "value": "input('Enter the Book name : ')"
+        "value": "input('Enter the Book name : ')",
+        "default_value": ""
     },
     "author": {
+        "type": "TEXT",
         "display_text": "Author of the Book",
         "Description": "This field represents the author name of the book.",
-        "value": "input('Enter the Author name of the book : ')"
+        "value": "input('Enter the Author name of the book : ')",
+        "default_value": ""
     },
     "is_read": {
+        "type": "TEXT",
         "display_text": "Is Book Read",
         "Description": "This field tells us whether a book is read or not.",
-        "value": "False"
+        "value": "False",
+        "default_value": "False"
     }
 }
