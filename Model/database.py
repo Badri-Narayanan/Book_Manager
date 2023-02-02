@@ -1,4 +1,6 @@
+from .database_connection import DataBaseConnection
 from typing import List, Dict, Union
+import json
 
 Book = Dict[str, Union[str, int]]
 
@@ -6,9 +8,17 @@ Book = Dict[str, Union[str, int]]
 class DataBase:
     def __init__(self, db_file_name: str):
         self.db_file_name = db_file_name
+        with open("meta_book_information.json") as meta_book_info_file:
+            self.book_info_needed = json.load(meta_book_info_file)
+
+    def get_table_schema(self) -> str:
+        raise NotImplementedError("Not Yet Implemented!!!")
 
     def create_storage(self) -> None:
-        raise NotImplementedError("This method needs to be implemented!!!")
+        table_schema = self.get_table_schema()
+        with DataBaseConnection(self.db_file_name) as connection:
+            cursor = connection.cursor()
+            cursor.execute(f"CREATE TABLE IF NOT EXISTS BOOKMANAGER({table_schema})")
 
     def get_all_books(self) -> List[Book]:
         raise NotImplementedError("This method needs to be implemented!!!")
