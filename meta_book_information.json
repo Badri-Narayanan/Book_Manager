@@ -4,7 +4,8 @@
         "display_text": "Book Name",
         "Description": "This field represents the book name to identify a book in the collection.",
         "value": "input('Enter the Book name : ')",
-        "default_value": ""
+        "default_value": "",
+        "constraints": "PRIMARY KEY"
     },
     "author": {
         "type": "TEXT",

@@ -12,19 +12,38 @@ class DataBase:
             self.book_info_needed = json.load(meta_book_info_file)
 
     def get_table_schema(self) -> str:
-        raise NotImplementedError("Not Yet Implemented!!!")
+        table_schema = ""
+        for field, field_details in self.book_info_needed.items():
+            if len(table_schema) != 0:
+                table_schema += ","
+
+            table_schema += f"{field} {field_details['type']}"
+
+            if "default_value" in field_details:
+                table_schema += f" DEFAULT {field_details['default_value']}"
+
+            if "constraints" in field_details:
+                table_schema += f" {field_details['constraints']}"
+
+        return table_schema
 
     def create_storage(self) -> None:
         table_schema = self.get_table_schema()
         with DataBaseConnection(self.db_file_name) as connection:
             cursor = connection.cursor()
-            cursor.execute(f"CREATE TABLE IF NOT EXISTS BOOKMANAGER({table_schema})")
+            cursor.execute(f"CREATE TABLE IF NOT EXISTS BookManager({table_schema})")
 
     def get_all_books(self) -> List[Book]:
-        raise NotImplementedError("This method needs to be implemented!!!")
+        with DataBaseConnection(self.db_file_name) as connection:
+            cursor = connection.cursor()
+            cursor.execute("SELECT * FROM BookManager LIMIT 20")
+            list_of_books = cursor.fetchall()
+            return [{"name": book[0], "author": book[1], "is_read": book[2]} for book in list_of_books]
 
     def store_book(self, book: dict) -> None:
-        raise NotImplementedError("This method needs to be implemented!!!")
+        with DataBaseConnection(self.db_file_name) as connection:
+            cursor = connection.cursor()
+            cursor.execute("INSERT INTO BookManager VALUES(?, ?, ?)", (book["name"], book["author"], "False"))
 
     def mark_book_as_read(self, book_name: str) -> None:
         raise NotImplementedError("This method needs to be implemented!!!")
