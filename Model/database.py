@@ -29,6 +29,7 @@ class DataBase:
 
     def create_storage(self) -> None:
         table_schema = self.get_table_schema()
+        print(table_schema)
         with DataBaseConnection(self.db_file_name) as connection:
             cursor = connection.cursor()
             cursor.execute(f"CREATE TABLE IF NOT EXISTS BookManager({table_schema})")
@@ -43,15 +44,25 @@ class DataBase:
     def store_book(self, book: dict) -> None:
         with DataBaseConnection(self.db_file_name) as connection:
             cursor = connection.cursor()
-            cursor.execute("INSERT INTO BookManager VALUES(?, ?, ?)", (book["name"], book["author"], "False"))
+            cursor.execute("INSERT INTO BookManager VALUES(?, ?, ?)", (book["name"], book["author"], 0))
 
     def mark_book_as_read(self, book_name: str) -> None:
-        raise NotImplementedError("This method needs to be implemented!!!")
+        with DataBaseConnection(self.db_file_name) as connection:
+            cursor = connection.cursor()
+            cursor.execute("UPDATE BookManager SET is_read = 1 WHERE name = ?", (book_name,))
 
     def get_book_details(self, book_name: str) -> Dict[str, Union[str, int]]:
-        raise NotImplementedError("This method needs to be implemented!!!")
+        with DataBaseConnection(self.db_file_name) as connection:
+            cursor = connection.cursor()
+            cursor.execute("SELECT * FROM BookManager WHERE name = ? LIMIT 20", (book_name,))
+            book = cursor.fetchone()
+            if not book or len(book) == 0:
+                return None
+            return {"name": book[0], "author": book[1], "is_read": book[2]}
 
-    def delete_book(self, book_name: str):
-        raise NotImplementedError("This method needs to be implemented!!!")
+    def delete_book(self, book_name: str) -> None:
+        with DataBaseConnection(self.db_file_name) as connection:
+            cursor = connection.cursor()
+            cursor.execute("DELETE FROM BookManager WHERE name = ?", (book_name,))
 
 

@@ -4,7 +4,7 @@
         "display_text": "Book Name",
         "Description": "This field represents the book name to identify a book in the collection.",
         "value": "input('Enter the Book name : ')",
-        "default_value": "",
+        "default_value": "NA",
         "constraints": "PRIMARY KEY"
     },
     "author": {
@@ -12,13 +12,13 @@
         "display_text": "Author of the Book",
         "Description": "This field represents the author name of the book.",
         "value": "input('Enter the Author name of the book : ')",
-        "default_value": ""
+        "default_value": "NA"
     },
     "is_read": {
-        "type": "TEXT",
+        "type": "INTEGER",
         "display_text": "Is Book Read",
         "Description": "This field tells us whether a book is read or not.",
-        "value": "False",
-        "default_value": "False"
+        "value": "0",
+        "default_value": "0"
     }
 }

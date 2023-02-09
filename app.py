@@ -1,4 +1,4 @@
-from Model.database import DataBase, Dict, Union
+from Model.database import *
 import json
 
 
@@ -42,6 +42,7 @@ class BookManager:
             print("Please Enter valid Book Name!!!")
             book_name = input(message)
 
+        book_name = book_name.lower()
         return book_name
 
     def print_line_seperator(self, seperator="-"):
@@ -63,7 +64,12 @@ class BookManager:
         for info in self.book_info_needed:
             meta_book_info = self.book_info_needed[info]
 
-            book_info[info] = eval(meta_book_info["value"])
+            book_field_data = eval(meta_book_info["value"])
+
+            if meta_book_info["type"] == "TEXT":
+                book_field_data = book_field_data.lower()
+
+            book_info[info] = book_field_data
 
         self.database.store_book(book_info)
 
@@ -73,14 +79,19 @@ class BookManager:
         for info in self.book_info_needed:
             meta_book_info = self.book_info_needed[info]
 
-            print(f"{meta_book_info['display_text']} : {book[info]}")
+            data_to_display = book[info]
+            if meta_book_info["type"] == "TEXT":
+                data_to_display = data_to_display.title()
+            if info == "is_read":
+                data_to_display = "Read" if data_to_display else "Not Read"
+            print(f"{meta_book_info['display_text']} : {data_to_display}")
 
     def display_all_books(self):
         list_of_books = self.database.get_all_books()
 
         for book_no, book in enumerate(list_of_books):
             self.print_line_seperator()
-            print(f"Book {book_no}")
+            print(f"Book {book_no + 1}")
             self.print_line_seperator()
 
             self.display_book_info(book)
@@ -89,9 +100,8 @@ class BookManager:
 
         print("All books are printed successfully!!")
 
-    def search_book(self, book_name: str) -> Dict[str, Union(str, bool)]:
+    def search_book(self, book_name: str):
         book = self.database.get_book_details(book_name)
-
         return book
 
     def find_book(self):
@@ -116,6 +126,7 @@ class BookManager:
             return
 
         self.database.delete_book(book_name)
+        print("Book Chosen is Deleted!!!")
 
     def mark_book_as_read(self):
         book_name = self.get_book_name("Enter the Book Name to Read : ")
@@ -126,6 +137,7 @@ class BookManager:
             return
 
         self.database.mark_book_as_read(book_name)
+        print("Book Chosen is marked as Read!!!")
 
     def run(self):
         self.display_user_menu()
@@ -138,7 +150,7 @@ class BookManager:
                 print("Please Enter valid user option available!!")
 
             self.display_user_menu()
-            user_input = input("Enter one of the option above : ")
+            user_input = input("Enter one of the option above or (q) to Quit : ")
 
         print('Thank you for your interaction with "Book Manager" your responses are being saved safely!!!')
 
